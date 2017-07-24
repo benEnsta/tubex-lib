@@ -22,7 +22,7 @@ cmake_minimum_required(VERSION 2.8.7)
 
   option(BUILD_TESTS "Build test" ON)
   option(ONLY_PYTHON_BINDINGS "build library with python bindings only" OFF)
-
+ option(WITH_PYTHON "build library with python bindings only" ON)
 
 # Position Independent Code
 
@@ -73,6 +73,11 @@ cmake_minimum_required(VERSION 2.8.7)
 
   add_subdirectory(examples)
 
+# Python bindings
+if (WITH_PYTHON)
+  add_subdirectory(pybind11)
+  add_subdirectory(python)
+endif(WITH_PYTHON)
 
 # Uninstallation
 

@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
       VibesFigure_Tube::show(&x);
       i++;
-      
+
       if(argc == 1) cin.ignore(); // press ENTER to continue
     } while(volume_x != x.volume()); // up to the fixpoint
 

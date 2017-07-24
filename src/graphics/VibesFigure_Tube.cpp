@@ -22,7 +22,7 @@ using namespace ibex;
 namespace tubex
 {
   std::map<Tube*,VibesFigure_Tube*> VibesFigure_Tube::map_graphics;
-   
+
   void VibesFigure_Tube::show(Tube *tube, const string& name, int x, int y)
   {
     std::map<double,double> empty_map;
