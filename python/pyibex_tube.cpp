@@ -86,20 +86,20 @@ PYBIND11_MODULE(tube, m)
     .def(init<const Tube&, const Interval&>())
     .def(init<const std::string&> ())
 
-    .def( "volume", &Tube::volume )
-    .def( "dist", &Tube::dist )
-    .def( "size", &Tube::size )
-    .def( "dt", &Tube::dt )
-    .def( "isSlice", &Tube::isSlice )
-    .def( "isEmpty", &Tube::isEmpty )
-    .def( "input2index", &Tube::input2index )
-    .def( "index2input", &Tube::index2input )
-    .def( "subTube", &subTube)
-    .def( "domain", (const ibex::Interval& (Tube::*) () const ) &Tube::domain )
-    .def( "domain", (const ibex::Interval& (Tube::*) (int) const ) &Tube::domain )
-    .def( "domain", (ibex::Interval (Tube::*) (double) const ) &Tube::domain )
-    .def( "image", &Tube::image)
-    .def( "tolist", &tolist)
+    .def("volume", &Tube::volume )
+    .def("dist", &Tube::dist )
+    .def("size", &Tube::size )
+    .def("dt", &Tube::dt )
+    .def("isSlice", &Tube::isSlice )
+    .def("isEmpty", &Tube::isEmpty )
+    .def("input2index", &Tube::input2index )
+    .def("index2input", &Tube::index2input )
+    .def("subTube", &subTube)
+    .def("domain", (const ibex::Interval& (Tube::*) () const ) &Tube::domain )
+    .def("domain", (const ibex::Interval& (Tube::*) (int) const ) &Tube::domain )
+    .def("domain", (ibex::Interval (Tube::*) (double) const ) &Tube::domain )
+    .def("image", &Tube::image)
+    .def("tolist", &tolist)
     // .def(const ibex::Interval& operator[](int index) const;
     // ibex::Interval operator[](double t) const;
     // ibex::Interval operator[](const ibex::Interval& intv_t) const;
@@ -173,11 +173,12 @@ PYBIND11_MODULE(tube, m)
           "slices_color"_a, "slices_contracted_color"_a="",
           "background_color"_a="lightGray[lightGray]",
           "truth_color"_a = "red")
-    // .def("show", VibesFigure_Tube::show)
-    // .def_static("show", ( void (VibesFigure_Tube::*) (Tube*, const std::string&, int, int)  )&VibesFigure_Tube::show)
-          // "tube"_a, "name"_a = "", "x"_a=0, "y"_a=0):
-    .def_static("show", [](Tube *tube, const std::string& name = "", int x = 0, int y = 0){
+    .def("show",  ( void (VibesFigure_Tube::*) ()  ) &VibesFigure_Tube::show)
+    .def("show", ( void (VibesFigure_Tube::*) (bool, int, bool)  )&VibesFigure_Tube::show,
+          "detail_slices"_a, "slices_limit"_a, "update_background"_a=true)
+    .def_static("showTube", [](Tube *tube, const std::string& name = "", int x = 0, int y = 0){
                           VibesFigure_Tube::show(tube,name,x,y);}, "tube"_a, "name"_a = "", "x"_a=0, "y"_a=0)
+    .def("showScalarValues", &VibesFigure_Tube::showScalarValues, "map_scalar_values"_a, "color"_a="red", "points_size"_a=0.)
 
     // }( void (VibesFigure_Tube::*) (Tube*, const std::string&, int, int)  )&VibesFigure_Tube::show)
           // "tube"_a, "name"_a = "", "x"_a=0, "y"_a=0):
