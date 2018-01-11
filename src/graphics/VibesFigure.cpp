@@ -22,6 +22,7 @@ namespace tubex
 {
   VibesFigure::VibesFigure(const string& figure_name) : m_view_box(2, Interval::EMPTY_SET)
   {
+    vibes::beginDrawing();
     m_name = figure_name;
     vibes::newFigure(m_name);
     vibes::newGroup("transparent_box", "#ffffffff", vibesParams("figure", m_name));
@@ -112,7 +113,7 @@ namespace tubex
   {
     string result;
     result.append(prefix);
-   
+
     char char_r[255];
     sprintf(char_r, "%.2X", r);
     result.append(char_r);

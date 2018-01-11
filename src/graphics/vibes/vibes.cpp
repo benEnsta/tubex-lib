@@ -92,7 +92,7 @@ namespace vibes
   namespace {
 
       /// Current communication file descriptor
-      FILE *channel=0;
+      FILE *channel=nullptr;
 
       /// Current figure name (client-maintained state)
       string current_fig="default";
@@ -123,6 +123,10 @@ namespace vibes
 
   void beginDrawing(const std::string &fileName)
   {
+    if (channel != nullptr){
+      fclose(channel);
+      channel = nullptr;
+    }
     channel=fopen(fileName.c_str(),"a");
   }
 
