@@ -79,13 +79,15 @@ PYBIND11_MODULE(tube, m)
 
   py::class_<Tube>(m, "Tube")
     .def(init<const Interval&, double, const Interval&>(), py::arg("intv_t"), py::arg("time_step"),
-            py::arg_t<ibex::Interval>("default_value", ibex::Interval::EMPTY_SET, "EMPTY_SET") ) // see http://pybind11.readthedocs.io/en/latest/advanced.html#default-arguments-revisited
-            // py::arg("default_value")=ibex::Interval::EMPTY_SET)
-    // .def(init<std::vector<ibex::Interval>, const Interval&>(), py::arg("vector_dt"), py::arg("default_value")=ibex::Interval::EMPTY_SET)
+            py::arg_t<ibex::Interval>("default_value", ibex::Interval::EMPTY_SET, "EMPTY_SET") )
+            // see http://pybind11.readthedocs.io/en/latest/advanced.html#default-arguments-revisited
     .def(init<const Tube&>())
     .def(init<const Tube&, const Interval&>())
     .def(init<const std::string&> ())
-
+    .def(init<const ibex::Interval&, double, const ibex::Function&, const ibex::Interval&>(),
+          py::arg("domain"), py::arg("timestep"), py::arg("f"),
+          py::arg_t<ibex::Interval>("default_value", ibex::Interval::EMPTY_SET, "EMPTY_SET")
+          )
     .def("volume", &Tube::volume )
     .def("dist", &Tube::dist )
     .def("size", &Tube::size )
@@ -100,9 +102,7 @@ PYBIND11_MODULE(tube, m)
     .def("domain", (ibex::Interval (Tube::*) (double) const ) &Tube::domain )
     .def("image", &Tube::image)
     .def("tolist", &tolist)
-    // .def(const ibex::Interval& operator[](int index) const;
-    // ibex::Interval operator[](double t) const;
-    // ibex::Interval operator[](const ibex::Interval& intv_t) const;
+
     .def("__getitem__", [](const Tube & t, int idx) -> Interval { return t[idx];})
     .def("__getitem__", [](const Tube & t, double time) -> Interval { return t[time];})
     .def("__setitem__", [](Tube & t, int idx, Interval& itv) { t.set(itv, idx);})
