@@ -13,7 +13,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
-
+#include <pybind11/functional.h>
 
 namespace py = pybind11;
 using namespace pybind11::literals;
@@ -122,17 +122,17 @@ PYBIND11_MODULE(tube, m)
 
     .def("primitive", &Tube::primitive, py::arg_t<ibex::Interval>("default_value", ibex::Interval(0), "[0,0]") )
 
-    .def("integral", (ibex::Interval (Tube::*) (double ) const ) &Tube::integral)
-    .def("integral", (ibex::Interval (Tube::*) (const ibex::Interval& ) const) &Tube::integral)
-    .def("integral", (ibex::Interval (Tube::*) (const ibex::Interval&, const ibex::Interval& ) const) &Tube::integral)
+    .def("integral", (ibex::Interval (Tube::*) (double ) const ) &Tube::integral, py::call_guard<py::gil_scoped_release>())
+    .def("integral", (ibex::Interval (Tube::*) (const ibex::Interval& ) const) &Tube::integral, py::call_guard<py::gil_scoped_release>())
+    .def("integral", (ibex::Interval (Tube::*) (const ibex::Interval&, const ibex::Interval& ) const) &Tube::integral, py::call_guard<py::gil_scoped_release>())
 
     //.def("timeIntegration", (ibex::Interval (Tube::*) (const ibex::Interval& , const ibex::Interval& ) const) &Tube::timeIntegration)
-    .def("ctcFwdBwd", &Tube::ctcFwdBwd, py::arg("derivative_tube"), py::arg("initial_value")=ibex::Interval::ALL_REALS )
+    .def("ctcFwdBwd", &Tube::ctcFwdBwd, py::arg("derivative_tube"), py::arg("initial_value")=ibex::Interval::ALL_REALS, py::call_guard<py::gil_scoped_release>())
 
     .def("eval", &Tube::eval)
 
     .def("ctcObs", (bool (Tube::*) (const Tube& , ibex::Interval&, const ibex::Interval&, bool) ) &Tube::ctcObs,
-                  "derivative_tube"_a, "t"_a, "y"_a, "fwd_bwd"_a=true)
+                  "derivative_tube"_a, "t"_a, "y"_a, "fwd_bwd"_a=true, py::call_guard<py::gil_scoped_release>())
 
     .def("invert", invert_wapper)
     .def("serialize", (bool (Tube::*)(const std::string&) const) &Tube::serialize)
