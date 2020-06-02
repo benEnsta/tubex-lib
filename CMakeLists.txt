@@ -41,6 +41,30 @@
   set(CMAKE_INSTALL_PKGCONFIG "share/pkgconfig" CACHE PATH "pkg files (share/pkgconfig)")
   set(CMAKE_INSTALL_CMAKE "share/tubex/cmake" CACHE PATH "cmake files (share/tubex/cmake)")
 
+  # Python binding:
+  if(WITH_PYTHON)
+    ################################################################################
+    # Set win32 flags to generate and use static lib
+    ################################################################################
+    if(WIN32)
+      add_subdirectory(pybind11)
+
+      add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+      set(CompilerFlags
+            CMAKE_CXX_FLAGS
+            CMAKE_CXX_FLAGS_DEBUG
+            CMAKE_CXX_FLAGS_RELEASE
+            CMAKE_C_FLAGS
+            CMAKE_C_FLAGS_DEBUG
+            CMAKE_C_FLAGS_RELEASE
+            )
+      foreach(CompilerFlag ${CompilerFlags})
+        string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+      endforeach()
+    endif()
+    add_subdirectory(python)
+  endif()
+
 
 ################################################################################
 # Compilation configuration
@@ -134,29 +158,6 @@
   add_subdirectory(src) # C++ sources
   add_subdirectory(doc) # documentation (Doxygen + Sphinx manual)
 
-  # Python binding:
-  if(WITH_PYTHON)
-    ################################################################################
-    # Set win32 flags to generate and use static lib
-    ################################################################################
-    if(WIN32)
-      add_subdirectory(pybind11)
-
-      add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-      set(CompilerFlags
-            CMAKE_CXX_FLAGS
-            CMAKE_CXX_FLAGS_DEBUG
-            CMAKE_CXX_FLAGS_RELEASE
-            CMAKE_C_FLAGS
-            CMAKE_C_FLAGS_DEBUG
-            CMAKE_C_FLAGS_RELEASE
-            )
-      foreach(CompilerFlag ${CompilerFlags})
-        string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
-      endforeach()
-    endif()
-    add_subdirectory(python)
-  endif()
 
 
 ################################################################################
