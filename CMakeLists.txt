@@ -60,6 +60,7 @@
   if(WIN32)
     # We need this for strdup under Windows (see issue #287 of ibex-lib repo)
     add_definitions(-U__STRICT_ANSI__)
+    
   endif()
 
   add_compile_options(-O3 -Wall)
@@ -135,7 +136,25 @@
 
   # Python binding:
   if(WITH_PYTHON)
-    add_subdirectory(pybind11)
+    ################################################################################
+    # Set win32 flags to generate and use static lib
+    ################################################################################
+    if(WIN32)
+      add_subdirectory(pybind11)
+
+      add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+      set(CompilerFlags
+            CMAKE_CXX_FLAGS
+            CMAKE_CXX_FLAGS_DEBUG
+            CMAKE_CXX_FLAGS_RELEASE
+            CMAKE_C_FLAGS
+            CMAKE_C_FLAGS_DEBUG
+            CMAKE_C_FLAGS_RELEASE
+            )
+      foreach(CompilerFlag ${CompilerFlags})
+        string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+      endforeach()
+    endif()
     add_subdirectory(python)
   endif()
 
