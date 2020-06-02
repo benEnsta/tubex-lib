@@ -45,15 +45,16 @@
 ################################################################################
 # Compilation configuration
 ################################################################################
+  if(NOT WIN32)
+    # Check that the compiler supports c++11
+    include(CheckCXXCompilerFlag)
+    check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
 
-  # Check that the compiler supports c++11
-  include(CheckCXXCompilerFlag)
-  check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
-
-  if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-  else()
-    message(FATAL_ERROR "Tubex needs a compiler with C++11 support")
+    if(COMPILER_SUPPORTS_CXX11)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    else()
+      message(FATAL_ERROR "Tubex needs a compiler with C++11 support")
+    endif()
   endif()
 
   if(WIN32)
