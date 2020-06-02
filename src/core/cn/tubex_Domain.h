@@ -21,6 +21,10 @@
 #include "tubex_Contractor.h"
 #include "tubex_ContractorNetwork.h"
 
+
+#ifdef INTERVAL
+#undef INTERVAL
+#endif
 namespace tubex
 {
   // todo: assert if structure of referenced domain changes (size, nb slices)
@@ -28,6 +32,7 @@ namespace tubex
   class DynCtc;
   class Contractor;
   class ContractorNetwork;
+
 
   class Domain
   {

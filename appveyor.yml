@@ -88,7 +88,7 @@ build_script:
   - git submodule init
   - git submodule update
   - mkdir build && cd build
-  - cmake -G "%CMAKE_PLATFORM%" -DCMAKE_BUILD_TYPE=Release -DPYBIND11_CPP_STANDARD=/std:c++14 -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DCMAKE_PREFIX_PATH=C:\projects\tubex-lib\ibex-lib\%IBEX_FILES%\share\ibex\cmake  -DBUILD_TESTS=ON -DWITH_TUBE_TREE=OFF -DWITH_CAPD=OFF -DWITH_PYTHON=OFF -DCMAKE_CXX_FLAGS="-fPIC" ..
+  - cmake -G "%CMAKE_PLATFORM%" -DCMAKE_BUILD_TYPE=Release -DPYBIND11_CPP_STANDARD=/std:c++14 -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DCMAKE_PREFIX_PATH=C:\projects\tubex-lib\ibex-lib\%IBEX_FILES%\share\ibex\cmake  -DBUILD_TESTS=ON -DWITH_TUBE_TREE=OFF -DWITH_CAPD=OFF -DWITH_PYTHON=ON -DCMAKE_CXX_FLAGS="-fPIC" ..
   - set MSBuildLogger="C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   - cmake --build . --config %Configuration% -- /m /v:m /logger:%MSBuildLogger%
   - ctest -C %Configuration% -VV
