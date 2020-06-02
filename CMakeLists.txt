@@ -63,7 +63,7 @@
     
   endif()
 
-  add_compile_options(-O3 -Wall)
+  # add_compile_options(-O3 -Wall)
 
 
 ################################################################################
