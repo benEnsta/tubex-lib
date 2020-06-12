@@ -64,6 +64,7 @@ environment:
 install:
   - cmd: '"%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" %PLATFORM%'
   - cmd: "%PYTHON_EXE% -m pip install --disable-pip-version-check --user --upgrade pip wheel"
+  - cmd: choco install doxygen
   - ps: >-
 
       (new-object net.webclient).DownloadFile($env:DL_IBEX_FILES, 'C:\projects\tubex-lib\ibex-lib.zip')
@@ -89,6 +90,8 @@ build_script:
   - git submodule update
   - mkdir build && cd build
   - cmake -G "%CMAKE_PLATFORM%" -DCMAKE_BUILD_TYPE=Release -DPYBIND11_CPP_STANDARD=/std:c++14 -DPYTHON_EXECUTABLE:FILEPATH=%PYTHON_DIR%/python.exe -DCMAKE_PREFIX_PATH=C:\projects\tubex-lib\ibex-lib\%IBEX_FILES%\share\ibex\cmake  -DBUILD_TESTS=ON -DWITH_TUBE_TREE=OFF -DWITH_CAPD=OFF -DWITH_PYTHON=ON -DCMAKE_CXX_FLAGS="-fPIC" ..
+  - cmake --build --target api
+  - cmake ..
   - set MSBuildLogger="C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
   - cmake --build . --config %Configuration% -- /m /v:m /logger:%MSBuildLogger%
   - ctest -C %Configuration% -VV

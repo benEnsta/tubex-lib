@@ -59,8 +59,9 @@ for obs in v_obs:
   obs[2].inflate(0.1) # bearing
 
 # Association set
-m = [IntervalVector(2)] * len(v_obs) # unknown association
-
+m = [IntervalVector(2) for _ in v_obs]
+# m = [IntervalVector(2), ] * len(v_obs) # unknown association
+print(list(map(id, m)))
 
 # =========== CUSTOM-BUILT CONTRACTORS ===========
 
