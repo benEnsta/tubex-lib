@@ -8,6 +8,10 @@
   include(version_from_git)
   version_from_git() # Obtains the version number from Git tags
 
+  # To use a specific compiler:
+  #set(CMAKE_C_COMPILER "gcc-7")
+  #set(CMAKE_CXX_COMPILER "/usr/bin/g++-7")
+
   project(tubex-lib VERSION ${VERSION} LANGUAGES CXX)
 
   if(NOT VERSION_ID)
@@ -42,29 +46,26 @@
   set(CMAKE_INSTALL_CMAKE "share/tubex/cmake" CACHE PATH "cmake files (share/tubex/cmake)")
 
 
-
-##############################################################################
+################################################################################
 # Compilation configuration
 ################################################################################
-  if(NOT WIN32)
-    # Check that the compiler supports c++11
-    include(CheckCXXCompilerFlag)
-    check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
 
-    if(COMPILER_SUPPORTS_CXX11)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-    else()
-      message(FATAL_ERROR "Tubex needs a compiler with C++11 support")
-    endif()
+  # Check that the compiler supports c++11
+  include(CheckCXXCompilerFlag)
+  check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
+
+  if(COMPILER_SUPPORTS_CXX11)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  else()
+    message(FATAL_ERROR "Tubex needs a compiler with C++11 support")
   endif()
 
   if(WIN32)
     # We need this for strdup under Windows (see issue #287 of ibex-lib repo)
     add_definitions(-U__STRICT_ANSI__)
-    
   endif()
 
-  # add_compile_options(-O3 -Wall)
+  add_compile_options(-O3 -Wall)
 
 
 ################################################################################
@@ -120,36 +121,12 @@
                       COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure $(ARGS)
                       DEPENDS tubex COMMENT "Running the tests")
 
-    add_subdirectory(tests)
+    #add_subdirectory(tests)
   endif()
 
   option(TEST_EXAMPLES "Testing examples" OFF)
   add_subdirectory(examples) # examples are tested as integration tests
 
-
-  # Python binding:
-  add_subdirectory(pybind11)
-  if(WITH_PYTHON)
-  ################################################################################
-  # Set win32 flags to generate and use static lib
-  ################################################################################
-  if(WIN32)
-
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-    set(CompilerFlags
-          CMAKE_CXX_FLAGS
-          CMAKE_CXX_FLAGS_DEBUG
-          CMAKE_CXX_FLAGS_RELEASE
-          CMAKE_C_FLAGS
-          CMAKE_C_FLAGS_DEBUG
-          CMAKE_C_FLAGS_RELEASE
-          )
-    foreach(CompilerFlag ${CompilerFlags})
-      string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
-    endforeach()
-  endif()
-  add_subdirectory(python)
-  endif()
 
 ################################################################################
 # Compile sources
@@ -159,6 +136,10 @@
   add_subdirectory(src) # C++ sources
   add_subdirectory(doc) # documentation (Doxygen + Sphinx manual)
 
+  # Python binding:
+  if(WITH_PYTHON)
+    add_subdirectory(python)
+  endif()
 
 
 ################################################################################

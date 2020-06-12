@@ -43,8 +43,9 @@ t = [0.3, 1.5, 2.0]                               # times of measurements
 
 # =========== 2. Defining contractors to deal with equations ===========
 
-ctc_f = CtcFunction("v[4]", "x[4]", "u[2]",
-                    "(v[0]-x[3]*cos(x[2]) ; v[1]-x[3]*sin(x[2]) ; v[2]-u[0] ; v[3]-u[1])")
+ctc_f = CtcFunction(
+  Function("v[4]", "x[4]", "u[2]",
+           "(v[0]-x[3]*cos(x[2]) ; v[1]-x[3]*sin(x[2]) ; v[2]-u[0] ; v[3]-u[1])"))
 
 
 # =============== 3. Adding the contractors to a network ===============
@@ -88,4 +89,4 @@ endDrawing()
 
 
 # Checking if this example still works:
-sys.exit(0 if x.volume() < 20. else 1) # todo: x.contains(x_truth)
+sys.exit(0 if x.contains(x_truth) == BoolInterval.YES else 1)

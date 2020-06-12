@@ -3,14 +3,13 @@ import distutils
 from distutils.util import get_platform
 from glob import glob
 
-# force External module
+# Force External module
 class BinaryDistribution(Distribution):
   def has_ext_modules(self):
     return True
   
   def is_pure(self):
     return False
-
 
 setup(
   name='${PYTHON_PACKAGE_NAME}',
@@ -30,7 +29,7 @@ setup(
   },
   install_requires=[
     'pip>=19.0.0',
-    'pyibex>=1.8.0'
+    'pyibex>=1.8.1'
   ],
   license="LGPLv3+",
   classifiers=[

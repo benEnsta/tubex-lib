@@ -46,8 +46,9 @@ int main()
     CtcDeriv ctc_deriv;
     CtcEval ctc_eval;
     ctc_eval.enable_time_propag(false); // faster use
-    CtcFunction ctc_f("x", "y", "xdot", "ydot", "xddot", "yddot",
-                      "-0.4*xddot*xdot - yddot");
+    CtcFunction ctc_f(
+      Function("x", "y", "xdot", "ydot", "xddot", "yddot",
+               "-0.4*xddot*xdot - yddot"));
 
   /* =========== PROPAGATION =========== */
 
@@ -66,10 +67,19 @@ int main()
       // Further constraints that could be considered
       if(false)
       {
-        ctc_eval.contract(x[1](M_PI/2.), 3.*M_PI/2., x[1], x[3]);
-        ctc_eval.contract(x[1](3.*M_PI/2.), M_PI/2., x[1], x[3]);
-        ctc_eval.contract(x[0](M_PI/2.), 3.*M_PI/2., x[0], x[2]);
-        ctc_eval.contract(x[0](3.*M_PI/2.), M_PI/2., x[0], x[2]);
+        Interval t, y;
+
+        t = x[1](M_PI/2.); y = 3.*M_PI/2.;
+        ctc_eval.contract(t, y, x[1], x[3]);
+
+        t = x[1](3.*M_PI/2.); y = M_PI/2.;
+        ctc_eval.contract(t, y, x[1], x[3]);
+
+        t = x[0](M_PI/2.); y = 3.*M_PI/2.;
+        ctc_eval.contract(t, y, x[0], x[2]);
+
+        t = x[0](3.*M_PI/2.); y = M_PI/2.;
+        ctc_eval.contract(t, y, x[0], x[2]);
         // todo: ctc_periodic.contract(x[1], M_PI);
       }
 
